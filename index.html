@@ -1,1 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Updated Font Awesome CDN for the social media icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind Games Parallax Effect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background: url('MillionairesMentalistHorizontal.png') no-repeat center center fixed;
+      background-size: cover;
+      height: 100%;
+    }
+
+    /* Glassmorphism with deeper blur for mystique */
+    .glassmorphism {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 30px;
+      display: inline-block;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+      border-bottom: 2px solid transparent;
+    }
+
+    nav a:hover {
+      color: #f1c40f;
+      border-bottom: 2px solid #f1c40f;
+    }
+
+    /* Initially hide the nav */
+nav {
+  display: none;
+}
+
+/* Make nav visible when it's scrolled into view */
+nav.visible {
+  display: block;
+}
+
+    section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    #parallax-section {
+      background-image: url('MillionairesMentalistHorizontal.png');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+      position: relative;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .parallax {
+      transition: transform 0.1s ease-in-out;
+      transform: scale(1.1);
+    }
+
+    .overlay-text {
+      position: absolute;      
+      font-size: 4rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .neon-text {
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 3rem;
+      text-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.7), 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 15px rgba(255, 255, 255, 0.3), 
+        0 0 20px rgba(255, 255, 255, 0.1),
+        0 0 25px rgba(255, 255, 255, 0.1),
+        0 0 30px rgba(255, 255, 255, 0.1);
+      animation: neon 1.5s infinite alternate;
+    }
+
+    @keyframes neon {
+      0% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.7),
+                     0 0 10px rgba(255, 255, 255, 0.5),
+                     0 0 15px rgba(255, 255, 255, 0.3),
+                     0 0 20px rgba(255, 255, 255, 0.1),
+                     0 0 25px rgba(255, 255, 255, 0.1),
+                     0 0 30px rgba(255, 255, 255, 0.1);
+      }
+      100% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.9),
+                     0 0 15px rgba(255, 255, 255, 0.7),
+                     0 0 20px rgba(255, 255, 255, 0.5),
+                     0 0 25px rgba(255, 255, 255, 0.3),
+                     0 0 30px rgba(255, 255, 255, 0.2),
+                     0 0 35px rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .gallery-container {
+      display: flex;
+      justify-content: space-around;
+      
+      gap: 20px;
+    }
+
+    .gallery-item {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+      filter: blur(3px);
+    }
+
+    #video-section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+    }
+
+    .video-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.8;
+    }
+
+    .dynamic-background {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background-color: rgba(0, 0, 0, 0.7);
+      animation: movingBackground 10s linear infinite;
+    }
+
+    @keyframes movingBackground {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 100% 100%;
+      }
+    }
+
+    /* Mind Games Section */
+    .mind-games {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 80%;
+      object-fit: contain;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    }
+
+    .modal:target {
+      display: flex;
+    }
+    
+    /* Close button styles */
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 2rem;
+      color: #fff;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Next and Previous buttons */
+    .modal-navigation {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .modal-navigation button {
+      background-color: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .modal-navigation button:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Overall Container */
+.cta-container {
+  display: flex;
+  align-items: center;
+  height: 100vh;      
+  transform: translateY(+45%);   
+}
+
+/* CTA Button Style */
+.cta-btn {
+  padding: 20px 40px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);  
+}
+
+/* Hover Effect */
+.cta-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-media {
+            margin-top: 15px;
+        }
+
+        .social-media a {
+            margin: 0 10px;
+            color: #fff;
+            font-size: 2rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-media a:hover {
+            color: #ff6f61;
+            
+        }
+
+        .social-media i {
+            margin-right: 5px;
+        }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="glassmorphism">
+    <a href="#parallax-section">DAN CHAN</a>
+    <a href="#gallery-section">iPhone Magician</a>
+    <a href="#video-section">Virtual Magician</a>
+    <a href="#dynamic-background">Fraud Detection</a>
+    <a href="#mind-games">Virtual Magic Shows</a>
+    <!-- <a href="#section-6">Book an Event</a>
+    <a href="#section-7">Blog</a>
+    <a href="#section-8">Testimonials</a>
+    <a href="#section-9">Contact Dan</a> -->
+
+    <div class="social-media">
+        <a href="mailto:contact@danchan.com" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i
+                class="fab fa-facebook-square"></i></a>
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com" target="_blank" aria-label="X (Twitter)"><i class="fab fa-twitter"></i></a>
+        <a href="https://pinterest.com" target="_blank" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+        <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    </div>
+
+  </nav>
+
+  <!-- Parallax Section -->
+  <section id="parallax-section" class="parallax">
+    <div class="overlay-text neon-text fade-in">MIND</div>
+    <div class="cta-container">
+        <button class="cta-btn">Experience the Mystery</button>
+      </div>
+      
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery-section" class="glassmorphism">
+    <div class="gallery-container">
+      <div class="gallery-item">
+        <img src="Palo Alto Magician.jpg" alt="Palo Alto Magician" onclick="openModal(this)">
+      </div>
+      <div class="gallery-item">
+        <img src="NEMS HOLIDAY PARTY 2022-216.jpg" alt="NEMS HOLIDAY PARTY 2022" onclick="openModal(this)">
+      </div>
+      <div class="gallery-item">
+        <img src="NEMS HOLIDAY PARTY 2022-205.jpg" alt="NEMS HOLIDAY PARTY 2022" onclick="openModal(this)">
+      </div>
+      <div class="gallery-item">
+        <img src="Best Magician In the Bay Area.jpg" alt="Best Magician In the Bay Area" onclick="openModal(this)">
+      </div>
+      <div class="gallery-item">
+        <img src="VivianChen.jpg" alt="Vivian Chen" onclick="openModal(this)">
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal for Image Enlargement -->
+  <div id="imageModal" class="modal">
+    <button class="modal-close" onclick="closeModal()">X</button>
+    <img class="modal-content" id="modalImage" src="" alt="">
+    <div class="modal-navigation">
+        <button onclick="changeImage(-1)">&#10094;</button>
+        <button onclick="changeImage(1)">&#10095;</button>
+      </div>
+  </div>
+
+  <!-- Video Section -->
+  <section id="video-section" class="glassmorphism">
+    <video class="video-background" autoplay loop muted>
+      <source src="dan_output1.mp4" type="video/mp4">
+    </video>
+    <div class="gallery-container">
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/JaO7S65OqE8" loading="lazy" title="YouTube video 1"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/HuqIwkb9_VA" loading="lazy" title="YouTube video 2"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/ePLD-gqHpRM" loading="lazy" title="YouTube video 3"></iframe>
+        </div>
+      </div>
+  </section>
+
+  <!-- Dynamic Background -->
+  <section id="dynamic-background" class="dynamic-background"></section>
+
+  <!-- Mind Games Section -->
+  <section id="mind-games" class="mind-games">
+    <h2>Experience the Mystery</h2>
+    <p>Unlock your mind. Delve into the unknown.</p>
+    <div class="gallery-container">
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/JaO7S65OqE8" loading="lazy" title="YouTube video 1"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/HuqIwkb9_VA" loading="lazy" title="YouTube video 2"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/ePLD-gqHpRM" loading="lazy" title="YouTube video 3"></iframe>
+        </div>
+      </div>
+  </section>
+
+  <!-- Trick Sections -->
+  <section id="section-6" class="glassmorphism">
+    <h2>The First Mind Trick</h2>
+    <p>Get ready to question everything you thought you knew.</p>
+    <div class="gallery-container">
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/JaO7S65OqE8" loading="lazy" title="YouTube video 1"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/HuqIwkb9_VA" loading="lazy" title="YouTube video 2"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/ePLD-gqHpRM" loading="lazy" title="YouTube video 3"></iframe>
+        </div>
+      </div>
+  </section>
+
+  <section id="section-7" class="glassmorphism">
+    <h2>The Second Mind Trick</h2>
+    <p>Can you solve this enigma?</p>
+    <div class="gallery-container">
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/JaO7S65OqE8" loading="lazy" title="YouTube video 1"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/HuqIwkb9_VA" loading="lazy" title="YouTube video 2"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/ePLD-gqHpRM" loading="lazy" title="YouTube video 3"></iframe>
+        </div>
+      </div>
+  </section>
+
+  <section id="section-8" class="glassmorphism">
+    <h2>The Ultimate Enigma</h2>
+    <p>Prepare to be amazed!</p>
+    <div class="gallery-container">
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/JaO7S65OqE8" loading="lazy" title="YouTube video 1"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/HuqIwkb9_VA" loading="lazy" title="YouTube video 2"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/ePLD-gqHpRM" loading="lazy" title="YouTube video 3"></iframe>
+        </div>
+      </div>
+  </section>
+
+  <section id="section-9" class="glassmorphism">
+    <h2>The Final Trick</h2>
+    <p>The mind game is complete. Were you fooled?</p>
+    <div class="gallery-container">
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/JaO7S65OqE8" loading="lazy" title="YouTube video 1"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/HuqIwkb9_VA" loading="lazy" title="YouTube video 2"></iframe>
+        </div>
+        <div class="gallery-item">
+          <iframe src="https://www.youtube.com/embed/ePLD-gqHpRM" loading="lazy" title="YouTube video 3"></iframe>
+        </div>
+      </div>
+  </section>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const parallaxSection = document.getElementById('parallax-section');
+      const sectionPosition = parallaxSection.getBoundingClientRect();
+
+      if (sectionPosition.top < window.innerHeight && sectionPosition.bottom >= 0) {
+        const scrollPosition = window.scrollY;
+        parallaxSection.style.transform = `scale(${1 + scrollPosition / 2000})`;
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+    const parallaxSection = document.getElementById('parallax-section');
+    const nav = document.querySelector('nav');
+    
+    // Check if the parallax section has been scrolled past
+    if (window.scrollY > parallaxSection.offsetHeight) {
+      nav.classList.add('visible');  // Show the nav
+    } else {
+      nav.classList.remove('visible');  // Hide the nav
+    }
+  });
+
+  var galleryImages = [];
+    var currentImageIndex = 0;
+
+    // Initialize gallery images array
+    document.querySelectorAll('.gallery-item img').forEach((img, index) => {
+      galleryImages.push(img.src);
+    });
+
+    // Open the modal with the clicked image
+    function openModal(img) {
+      var modal = document.getElementById("imageModal");
+      var modalImg = document.getElementById("modalImage");
+      modal.style.display = "flex";
+      modalImg.src = img.src;
+      currentImageIndex = galleryImages.indexOf(img.src);
+    }
+
+    // Close the modal
+    function closeModal() {
+      var modal = document.getElementById("imageModal");
+      modal.style.display = "none";
+    }
+
+    // Change the image in the modal
+    function changeImage(direction) {
+      currentImageIndex += direction;
+
+      if (currentImageIndex < 0) {
+        currentImageIndex = galleryImages.length - 1; // Loop back to the last image
+      } else if (currentImageIndex >= galleryImages.length) {
+        currentImageIndex = 0; // Loop back to the first image
+      }
+
+      var modalImg = document.getElementById("modalImage");
+      modalImg.src = galleryImages[currentImageIndex];
+    }
+
+    // Add event listener for the Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
 
